@@ -10,10 +10,10 @@ var data = {
     nextMatrix:[],
 
     init: function() {
-        for(var i = 0; i < world.options.worldWidth; i++){
+        for(var i = 0; i < world.options.worldHeight; i++){
             this.currentMatrix[i] = [];
             this.nextMatrix[i] = [];
-            for(var j = 0; j < world.options.worldLenght; j++){
+            for(var j = 0; j < world.options.worldWidth; j++){
                 this.currentMatrix[i][j] = 0;
                 this.nextMatrix[i][j] = 0;
             }
@@ -30,7 +30,7 @@ var world = {
         container: 'main',
         speedInput: 'aside .speed',
         widthInput: 'aside .width',
-        lengthInput: 'aside .lenght',
+        heightInput: 'aside .height',
         timerId: 0,
         isRunnung: false
     },
@@ -38,9 +38,11 @@ var world = {
     options: {},
 
     subscribe: function(){
-        $(this.config.startButton).on('click', this.start.bind(this) );
-        $(this.config.pauseButton).on('click', this.pause.bind(this) );
-        $(this.config.stopButton).on('click', this.stop.bind(this) );
+        $(this.config.startButton).on('click', this.start.bind(this));
+        $(this.config.pauseButton).on('click', this.pause.bind(this));
+        $(this.config.stopButton).on('click', this.stop.bind(this));
+        $(this.config.widthInput).on('change', this.changeSize.bind(this));
+        $(this.config.heightInput).on('change', this.changeSize.bind(this));
         $(this.config.speedInput).on('change',  function() {
             this.updateOptions();
             if (this.config.isRunnung) {
@@ -73,15 +75,23 @@ var world = {
     updateOptions: function(){
         this.options.speed = $(this.config.speedInput).val();
         this.options.worldWidth = $(this.config.widthInput).val();
-        this.options.worldLenght = $(this.config.lengthInput).val();
+        this.options.worldHeight = $(this.config.heightInput).val();
         return this.options;
     },
 
+    changeSize: function() {
+        try {this.stop();} catch (e) {}
+        this.updateOptions();
+        data.init(world.options);
+        $(this.config.table).html('');
+        this.initRenderTable(world.options);
+    },
+
     initRenderTable: function(options) {
-        for (var i = 0; i < options.worldWidth; i++) {
+        for (var i = 0; i < options.worldHeight; i++) {
             var $tr = $('<tr>');
             $(this.config.table).append($tr);
-            for (var j = 0; j < options.worldLenght; j++) {
+            for (var j = 0; j < options.worldWidth; j++) {
                 var $td = $('<td>');
                 $tr.append($td);
             }
@@ -89,15 +99,16 @@ var world = {
     },
 
     updateWorld: function() {
+        // have to be in data
         console.log('updateWorld response');
-        for (var i = 0; i < world.options.worldWidth; i++) {
-            for (var j = 0; j < world.options.worldLenght; j++) {
+        for (var i = 0; i < world.options.worldHeight; i++) {
+            for (var j = 0; j < world.options.worldWidth; j++) {
                 data.nextMatrix[i][j] = data.currentMatrix[i][j];
             }
         }
         var liveNeighbor;
-        for (var i = 0; i < world.options.worldWidth; i++) {
-            for (var j = 0; j < world.options.worldLenght; j++) {
+        for (var i = 0; i < world.options.worldHeight; i++) {
+            for (var j = 0; j < world.options.worldWidth; j++) {
                 liveNeighbor = 0;
                 console.log('i=', i, 'j=', j);
                 try {
@@ -180,8 +191,8 @@ var world = {
                 }
             }
         }
-        for (var i = 0; i < world.options.worldWidth; i++) {
-            for (var j = 0; j < world.options.worldLenght; j++) {
+        for (var i = 0; i < world.options.worldHeight; i++) {
+            for (var j = 0; j < world.options.worldWidth; j++) {
                 data.currentMatrix[i][j] = data.nextMatrix[i][j];
             }
         }
@@ -189,8 +200,8 @@ var world = {
     },
 
     renderMatrix: function(matrix) {
-        for(var i = 0; i < world.options.worldWidth; i++){
-            for(var j = 0; j < world.options.worldLenght; j++) {
+        for(var i = 0; i < world.options.worldHeight; i++){
+            for(var j = 0; j < world.options.worldWidth; j++) {
                 if (matrix[i][j] === 1) {
                     $(this.config.table)[0].children[i].cells[j].style.background = '#000000';
                 }

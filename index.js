@@ -54,6 +54,9 @@ var world = {
     },
 
     start: function() {
+        if (this.config.isRunnung === true) {
+            return;
+        }
         this.config.timerId = window.setInterval(this.updateWorld.bind(this), this.options.speed);
         this.config.isRunnung = true;
     },
@@ -115,80 +118,67 @@ var world = {
                     if ((data.currentMatrix[i - 1][j - 1]) && (data.currentMatrix[i - 1][j - 1] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i - 1][j]) && (data.currentMatrix[i - 1][j] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i - 1][j + 1]) && (data.currentMatrix[i - 1][j + 1] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i][j - 1]) && (data.currentMatrix[i][j - 1] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i][j + 1]) && (data.currentMatrix[i][j + 1] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i + 1][j - 1]) && (data.currentMatrix[i + 1][j - 1] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i + 1][j]) && (data.currentMatrix[i + 1][j] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i + 1][j + 1]) && (data.currentMatrix[i + 1][j + 1] === 1)) {
                         liveNeighbor += 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i][j] === 1) && (liveNeighbor <= 1)) {
                         data.nextMatrix[i][j] = 0;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i][j] === 1) && (liveNeighbor === 2)) {
                         data.nextMatrix[i][j] = 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i][j] === 1) && (liveNeighbor === 3)) {
                         data.nextMatrix[i][j] = 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i][j] === 1) && (liveNeighbor >= 4)) {
                         data.nextMatrix[i][j] = 0;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
                 try {
                     if ((data.currentMatrix[i][j] === 0) && (liveNeighbor === 3)) {
                         data.nextMatrix[i][j] = 1;
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
             }
         }
         for (var i = 0; i < world.options.worldHeight; i++) {
